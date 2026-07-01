@@ -1,0 +1,14 @@
+name: cloudflare-tools
+
+services:
+  dns-updater:
+    build:
+      context: .
+    container_name: dns-updater
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+      #  We can change the providers with this
+    # - ./check-ip-providers.txt:/app/check-ip-providers.txt:ro
