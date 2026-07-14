@@ -33,6 +33,8 @@ while true; do
 				log-info "Saving current IP to last IP file."
 				echo "$CURRENT_IP" >"$LAST_IP_FILE"
 			fi
+		else
+			log-info "IP was not changed since last update, old: '$LAST_IP', new: '$CURRENT_IP'"
 		fi
 	fi
 
