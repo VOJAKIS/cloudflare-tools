@@ -10,7 +10,7 @@ log-info "Going to check every: $INTERVAL_SECONDS"
 
 while true; do
 	log-info "Starting get IP script."
-	GET_IP_SCRIPT_OUTPUT=$(/app/get-ip.sh)
+	GET_IP_SCRIPT_OUTPUT=$(. get-ip.sh)
 	log-debug "Output from script: $GET_IP_SCRIPT_OUTPUT"
 	CURRENT_IP=$(echo "$GET_IP_SCRIPT_OUTPUT" | tail -n1)
 	log-debug "IP from script: $CURRENT_IP"
@@ -26,12 +26,12 @@ while true; do
 			log-info "IP change detected. Old: '$LAST_IP', New: '$CURRENT_IP'"
 
 			log-info "Starting Cloudflare update script."
-			/app/update-cloudflare.sh "$CURRENT_IP"
+			. update-cloudflare.sh "$CURRENT_IP"
 
 			# If script ran successfully, then save the "new" (=currnet) IP to file
 			if [ $? -eq 0 ]; then
 				log-info "Saving current IP to last IP file."
-				echo "$CURRENT_IP" >"$LAST_IP_FILE"
+				echo -n "$CURRENT_IP" >"$LAST_IP_FILE"
 			fi
 		else
 			log-info "IP was not changed since last update, old: '$LAST_IP', new: '$CURRENT_IP'"

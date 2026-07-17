@@ -7,7 +7,7 @@ NEW_IP=$1
 if [ -z "$NEW_IP" ]; then
 	# echo "$(date '+%Y-%m-%d %H:%M:%S') - Chyba: Skriptu update-cloudflare nebola odovzdaná IP adresa." >&2
 	log-error "No IP was provided as argument, exiting." >&2
-	exit 1
+	return 1
 fi
 
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - Volám Cloudflare API pre $CLOUDFLARE_DOMAIN_NAME -> $NEW_IP"
@@ -34,10 +34,10 @@ success=$(echo "$response" | jq -r '.success')
 if [ "$success" = "true" ]; then
 	# echo "$(date '+%Y-%m-%d %H:%M:%S') - Cloudflare DNS bol úspešne zmenený."
 	log-info "Cloudflare DNS was successfully changed."
-	exit 0
+	return 0
 else
 	# echo "$(date '+%Y-%m-%d %H:%M:%S') - CHYBA pri aktualizácii Cloudflare:" >&2
 	log-error "Cloudflare DNS was NOT successfully changed." >&2
 	echo "$response" | jq . >&2
-	exit 1
+	return 1
 fi
