@@ -9,10 +9,10 @@ RUN apk add --no-cache bash curl jq coreutils \
 WORKDIR /app
 
 # Copy scripts
-COPY main.sh get-ip.sh update-cloudflare.sh logger.sh check-ip-providers.txt ./
+COPY main.sh get-ip.sh update-cloudflare.sh logger.sh next-check.sh check-ip-providers.txt ./
 
 # Enable execution of scripts
-RUN chmod +x main.sh get-ip.sh update-cloudflare.sh logger.sh
+RUN chmod +x main.sh get-ip.sh update-cloudflare.sh logger.sh next-check.sh
 
 # Switch to nonroot user
 USER nonroot

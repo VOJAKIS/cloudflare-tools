@@ -2,7 +2,7 @@
 
 . ./logger.sh
 
-INTERVAL_SECONDS=${CHECK_INTERVAL:-5m}
+INTERVAL=${CHECK_INTERVAL:-5m}
 LAST_IP_FILE="/data/last_ip.txt"
 
 graceful_shutdown() {
@@ -14,7 +14,7 @@ graceful_shutdown() {
 trap graceful_shutdown SIGTERM SIGINT
 
 log-info "Starting main DDNS manager."
-log-info "Going to check every: $INTERVAL_SECONDS"
+log-info "Check interval: $INTERVAL"
 
 while true; do
 	log-info "Starting get IP script."
@@ -46,8 +46,10 @@ while true; do
 		fi
 	fi
 
+	log-info "Next check will run at: $(. next-check.sh ${INTERVAL})"
+
 	log-info "Starting sleeping..."
-	sleep "$INTERVAL_SECONDS" &
+	sleep "$INTERVAL" &
 	wait $!
 done
 
