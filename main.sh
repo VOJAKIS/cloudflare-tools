@@ -5,6 +5,14 @@
 INTERVAL_SECONDS=${CHECK_INTERVAL:-5m}
 LAST_IP_FILE="/data/last_ip.txt"
 
+graceful_shutdown() {
+	log-info "Received signal for shutdown. Immediately stopping container..."
+	exit 0
+}
+
+# 2. Catching signals (SIGTERM = docker stop, SIGINT = Ctrl + C)
+trap graceful_shutdown SIGTERM SIGINT
+
 log-info "Starting main DDNS manager."
 log-info "Going to check every: $INTERVAL_SECONDS"
 
@@ -39,7 +47,8 @@ while true; do
 	fi
 
 	log-info "Starting sleeping..."
-	sleep "$INTERVAL_SECONDS"
+	sleep "$INTERVAL_SECONDS" &
+	wait $!
 done
 
-log-warn "Main script is existing..."
+log-warn "Main script is exiting..."
