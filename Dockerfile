@@ -2,9 +2,9 @@
 FROM alpine:3.24.1
 
 # Install dependencies & create nonroot user (security reasons)
-RUN apk add --no-cache bash curl jq coreutils \
-		&& addgroup -S nonroot \
-    && adduser -S nonroot -G nonroot
+RUN apk add --no-cache bash curl jq coreutils tzdata \
+	&& addgroup -S nonroot \
+	&& adduser -S nonroot -G nonroot
 
 WORKDIR /app
 
